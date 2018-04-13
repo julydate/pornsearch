@@ -17,68 +17,72 @@ $getPornPage = curl_exec($ch);
 $httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 curl_close($ch);
 if($getPornPage === FALSE||$httpCode >= "300" ){
-	$pornContent = "未查询到番剧内容";
+	echo "未查询到番剧内容";
 	} else {
-		/*提取影片信息*/
 		if(@$_GET['img'] === '1') {
+			/*提取图片信息*/
 			preg_match_all('/<a.class=\"bigImage\".href=\"(.*?)\">/is',$getPornPage,$moviePic);
 			echo $moviePic[1][0];
-		} else {
-		preg_match_all('/<h3>(.*?)<\/h3>/is',$getPornPage,$movieTitle);
-		preg_match_all('/識別碼:<\/span>.<span.style=\".*?\">([\s\S]*?)<\/span>/is',$getPornPage,$movieCode);
-		preg_match_all('/發行日期:<\/span>(.*?)<\/p>/is',$getPornPage,$movieDate);
-		preg_match_all('/長度:<\/span>(.*?)<\/p>/is',$getPornPage,$movieTime);
-		preg_match_all('/<div.class=\"star-name\"><a.*?>([\s\S]*?)<\/a><\/div>/is',$getPornPage,$movieActor);
-		preg_match_all('/導演:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieDirector);
-		preg_match_all('/製作商:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieMake);
-		preg_match_all('/發行商:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieIssue);
-		preg_match_all('/<span.class=\"genre\"><a.href=\"https:\/\/www.javbus.com\/genre\/[^\s]*">([\s\S]*?)<\/a>/is',$getPornPage,$movieTag);
-		/*echo "<pre>movieTitle:";print_r($movieTitle);echo "<pre>";
-		echo "<pre>movieCode:";print_r($movieCode);echo "<pre>";
-		echo "<pre>movieDate:";print_r($movieDate);echo "<pre>";
-		echo "<pre>movieDate:";print_r($movieTime);echo "<pre>";
-		echo "<pre>movieActor:";print_r($movieActor);echo "<pre>";
-		echo "<pre>movieDirector:";print_r($movieDirector);echo "<pre>";
-		echo "<pre>movieMake:";print_r($movieMake);echo "<pre>";
-		echo "<pre>movieIssue:";print_r($movieIssue);echo "<pre>";
-		echo "<pre>movieTag:";print_r($movieTag);echo "<pre>";*/
-		$act = '';
-		$tag = '';
-		foreach($movieActor[1] as $actor){
-			$act = $actor." ".$act; 
-		} 
-		foreach($movieTag[1] as $mTag){ 
-			$tag = $mTag." ".$tag; 
 		}
-		echo $movieTitle[1][0]."\n番号:".$movieCode[1][0]."\n發行:".$movieDate[1][0]." ".$movieTime[1][0]."\n導演:".$movieDirector[1][0]."\n演员:".$act."\n製作商:".$movieMake[1][0]." 發行商:".$movieIssue[1][0]."\n标签:".$tag;
-		/*获取磁力链接并返回前两条*/
-		$getGid = preg_match('/(var\sgid\s+)=.\d+/i',$getPornPage,$getPorn);
-		$getGid = preg_match('/\d+/', $getPorn[0], $pornGid);
-		if($getGid) {
-			$gid = $pornGid[0];
-			$headers = randIp();
-			$ch = curl_init();
-			$referer = "https://www.javbus.com/".$pornCode;
-			curl_setopt($ch,CURLOPT_URL,"https://www.javbus.com/ajax/uncledatoolsbyajax.php?uc=0&gid=".$gid);
-			curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-			curl_setopt($ch,CURLOPT_HEADER,0);
-			curl_setopt($ch, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.157 Safari/537.36");
-			curl_setopt($ch,CURLOPT_REFERER,$referer);
-			curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);//构造HTTP头
-			curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时限制防止死循环 
-			$getUrlPage = curl_exec($ch);
-			$httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
-			curl_close($ch);
-			if($getUrlPage === FALSE||$httpCode >= "300" ){
-				echo 'Bad Requests';
-			} else {
-				preg_match_all('/<td.width=\".*?\">\s+<a .*?href="(.*?)".*?>[(^\s*)|(\s*$)]([\s\S]*?)\s+[<a|<\/a>]/is',$getUrlPage,$getUrl);
-				//echo "<pre>getUrl:";print_r($getUrl);echo "<pre>";
-				echo "\n".trim($getUrl[2][0])." 链接:\n".$getUrl[1][0]."\n".trim($getUrl[2][1])." 链接:\n".$getUrl[1][1];
+		if(@$_GET['inf'] === '1') {
+			/*提取影片信息*/
+			preg_match_all('/<h3>(.*?)<\/h3>/is',$getPornPage,$movieTitle);
+			preg_match_all('/識別碼:<\/span>.<span.style=\".*?\">([\s\S]*?)<\/span>/is',$getPornPage,$movieCode);
+			preg_match_all('/發行日期:<\/span>(.*?)<\/p>/is',$getPornPage,$movieDate);
+			preg_match_all('/長度:<\/span>(.*?)<\/p>/is',$getPornPage,$movieTime);
+			preg_match_all('/<div.class=\"star-name\"><a.*?>([\s\S]*?)<\/a><\/div>/is',$getPornPage,$movieActor);
+			preg_match_all('/導演:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieDirector);
+			preg_match_all('/製作商:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieMake);
+			preg_match_all('/發行商:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieIssue);
+			preg_match_all('/<span.class=\"genre\"><a.href=\"https:\/\/www.javbus.com\/genre\/[^\s]*">([\s\S]*?)<\/a>/is',$getPornPage,$movieTag);
+			/*echo "<pre>movieTitle:";print_r($movieTitle);echo "<pre>";
+			echo "<pre>movieCode:";print_r($movieCode);echo "<pre>";
+			echo "<pre>movieDate:";print_r($movieDate);echo "<pre>";
+			echo "<pre>movieDate:";print_r($movieTime);echo "<pre>";
+			echo "<pre>movieActor:";print_r($movieActor);echo "<pre>";
+			echo "<pre>movieDirector:";print_r($movieDirector);echo "<pre>";
+			echo "<pre>movieMake:";print_r($movieMake);echo "<pre>";
+			echo "<pre>movieIssue:";print_r($movieIssue);echo "<pre>";
+			echo "<pre>movieTag:";print_r($movieTag);echo "<pre>";*/
+			$act = '';
+			$tag = '';
+			foreach($movieActor[1] as $actor){
+				$act = $actor." ".$act; 
+			} 
+			foreach($movieTag[1] as $mTag){ 
+				$tag = $mTag." ".$tag; 
 			}
-		} else {
-			echo 'Bad Requests';
+			echo $movieTitle[1][0]."\n番号:".$movieCode[1][0]."\n發行:".$movieDate[1][0]." ".$movieTime[1][0]."\n導演:".$movieDirector[1][0]."\n演员:".$act."\n製作商:".$movieMake[1][0]." 發行商:".$movieIssue[1][0]."\n标签:".$tag;
 		}
+		if(@$_GET['url'] === '1') {
+			/*获取磁力链接并返回前两条*/
+			$getGid = preg_match('/(var\sgid\s+)=.\d+/i',$getPornPage,$getPorn);
+			$getGid = preg_match('/\d+/', $getPorn[0], $pornGid);
+			if($getGid) {
+				$gid = $pornGid[0];
+				$headers = randIp();
+				$ch = curl_init();
+				$referer = "https://www.javbus.com/".$pornCode;
+				curl_setopt($ch,CURLOPT_URL,"https://www.javbus.com/ajax/uncledatoolsbyajax.php?uc=0&gid=".$gid);
+				curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+				curl_setopt($ch,CURLOPT_HEADER,0);
+				curl_setopt($ch, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.157 Safari/537.36");
+				curl_setopt($ch,CURLOPT_REFERER,$referer);
+				curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);//构造HTTP头
+				curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时限制防止死循环 
+				$getUrlPage = curl_exec($ch);
+				$httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+				curl_close($ch);
+				if($getUrlPage === FALSE||$httpCode >= "300" ){
+					echo 'Bad Requests';
+				} else {
+					preg_match_all('/<td.width=\".*?\">\s+<a .*?href="(.*?)".*?>[(^\s*)|(\s*$)]([\s\S]*?)\s+[<a|<\/a>]/is',$getUrlPage,$getUrl);
+					//echo "<pre>getUrl:";print_r($getUrl);echo "<pre>";
+					echo "\n".trim($getUrl[2][0])." 链接:\n".urldecode($getUrl[1][0])."\n".trim($getUrl[2][1])." 链接:\n".urldecode($getUrl[1][1]);
+				}
+			} else {
+				echo 'Bad Requests';
+			}
 		}
 }
 
