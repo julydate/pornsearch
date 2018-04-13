@@ -43,6 +43,8 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 			foreach($movieTag[1] as $mTag){ 
 				$tag = $mTag." ".$tag; 
 			}
+			$movieDirector[1][0] = $movieDirector[1][0] ? $movieDirector[1][0] : '-';
+			$act = $act ? $act : '-';
 			echo $movieTitle[1][0]."\n番号:".$movieCode[1][0]."\n發行:".$movieDate[1][0]." ".$movieTime[1][0]."\n導演:".$movieDirector[1][0]."\n演员:".$act."\n製作商:".$movieMake[1][0]."  發行商:".$movieIssue[1][0]."\n标签:".$tag;
 		}
 		if(@$_GET['url'] === '1') {
@@ -68,7 +70,12 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 					echo 'Bad Requests';
 				} else {
 					preg_match_all('/<td.width=\".*?\">\s+<a .*?href="(.*?)".*?>[(^\s*)|(\s*$)]([\s\S]*?)\s+[<a|<\/a>]/is',$getUrlPage,$getUrl);
-					echo "\n《".trim($getUrl[2][0])."》链接:\n".urldecode($getUrl[1][0])."\n《".trim($getUrl[2][1])."》链接:\n".urldecode($getUrl[1][1]);
+					if($getUrl[1][0]) {
+						echo "\n《".trim($getUrl[2][0])."》链接:\n".urldecode($getUrl[1][0]);
+					}
+					if($getUrl[1][1]) {
+						echo "\n《".trim($getUrl[2][1])."》链接:\n".urldecode($getUrl[1][1]);
+					}
 				}
 			} else {
 				echo 'Bad Requests';
