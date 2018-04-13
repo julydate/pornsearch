@@ -52,7 +52,7 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 			foreach($movieTag[1] as $mTag){ 
 				$tag = $mTag." ".$tag; 
 			}
-			echo $movieTitle[1][0]."\n番号:".$movieCode[1][0]."\n發行:".$movieDate[1][0]." ".$movieTime[1][0]."\n導演:".$movieDirector[1][0]."\n演员:".$act."\n製作商:".$movieMake[1][0]." 發行商:".$movieIssue[1][0]."\n标签:".$tag;
+			echo $movieTitle[1][0]."\n番号:".$movieCode[1][0]."\n發行:".$movieDate[1][0]." ".$movieTime[1][0]."\n導演:".$movieDirector[1][0]."\n演员:".$act."\n製作商:".$movieMake[1][0]."  發行商:".$movieIssue[1][0]."\n标签:".$tag;
 		}
 		if(@$_GET['url'] === '1') {
 			/*获取磁力链接并返回前两条*/
@@ -78,7 +78,7 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 				} else {
 					preg_match_all('/<td.width=\".*?\">\s+<a .*?href="(.*?)".*?>[(^\s*)|(\s*$)]([\s\S]*?)\s+[<a|<\/a>]/is',$getUrlPage,$getUrl);
 					//echo "<pre>getUrl:";print_r($getUrl);echo "<pre>";
-					echo "\n".trim($getUrl[2][0])." 链接:\n".urldecode($getUrl[1][0])."\n".trim($getUrl[2][1])." 链接:\n".urldecode($getUrl[1][1]);
+					echo "\n《".trim($getUrl[2][0])."》链接:\n".urldecode($getUrl[1][0])."\n《".trim($getUrl[2][1])."》链接:\n".urldecode($getUrl[1][1]);
 				}
 			} else {
 				echo 'Bad Requests';
