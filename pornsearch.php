@@ -35,15 +35,6 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 			preg_match_all('/製作商:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieMake);
 			preg_match_all('/發行商:<\/span>.<a.*?>(.*?)<\/a>/is',$getPornPage,$movieIssue);
 			preg_match_all('/<span.class=\"genre\"><a.href=\"https:\/\/www.javbus.com\/genre\/[^\s]*">([\s\S]*?)<\/a>/is',$getPornPage,$movieTag);
-			/*echo "<pre>movieTitle:";print_r($movieTitle);echo "<pre>";
-			echo "<pre>movieCode:";print_r($movieCode);echo "<pre>";
-			echo "<pre>movieDate:";print_r($movieDate);echo "<pre>";
-			echo "<pre>movieDate:";print_r($movieTime);echo "<pre>";
-			echo "<pre>movieActor:";print_r($movieActor);echo "<pre>";
-			echo "<pre>movieDirector:";print_r($movieDirector);echo "<pre>";
-			echo "<pre>movieMake:";print_r($movieMake);echo "<pre>";
-			echo "<pre>movieIssue:";print_r($movieIssue);echo "<pre>";
-			echo "<pre>movieTag:";print_r($movieTag);echo "<pre>";*/
 			$act = '';
 			$tag = '';
 			foreach($movieActor[1] as $actor){
@@ -77,7 +68,6 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 					echo 'Bad Requests';
 				} else {
 					preg_match_all('/<td.width=\".*?\">\s+<a .*?href="(.*?)".*?>[(^\s*)|(\s*$)]([\s\S]*?)\s+[<a|<\/a>]/is',$getUrlPage,$getUrl);
-					//echo "<pre>getUrl:";print_r($getUrl);echo "<pre>";
 					echo "\n《".trim($getUrl[2][0])."》链接:\n".urldecode($getUrl[1][0])."\n《".trim($getUrl[2][1])."》链接:\n".urldecode($getUrl[1][1]);
 				}
 			} else {
