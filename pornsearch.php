@@ -1,23 +1,21 @@
 <?php 
 define('INDEX',TRUE);
 if(@$_GET['code']) {
+	/*通过番号查询*/
 	$pornCode = $_GET['code'];
-} else {
-	exit('番号为空');
-}
-$headers = randIp();
-$ch = curl_init();
-curl_setopt($ch,CURLOPT_URL,"https://www.javbus.com/".$pornCode);
-curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-curl_setopt($ch,CURLOPT_HEADER,0);
-curl_setopt($ch, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.157 Safari/537.36");
-curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);//构造HTTP头
-curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时限制防止死循环 
-$getPornPage = curl_exec($ch);
-$httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
-curl_close($ch);
-if($getPornPage === FALSE||$httpCode >= "300" ){
-	echo "未查询到番剧内容";
+	$headers = randIp();
+	$ch = curl_init();
+	curl_setopt($ch,CURLOPT_URL,"https://www.javbus.com/".$pornCode);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+	curl_setopt($ch,CURLOPT_HEADER,0);
+	curl_setopt($ch, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.157 Safari/537.36");
+	curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);//构造HTTP头
+	curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时限制防止死循环 
+	$getPornPage = curl_exec($ch);
+	$httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	if($getPornPage === FALSE||$httpCode >= "300" ){
+		echo "未查询到番剧内容";
 	} else {
 		if(@$_GET['img'] === '1') {
 			/*提取图片信息*/
@@ -45,7 +43,7 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 			}
 			$movieDirector[1][0] = $movieDirector[1][0] ? $movieDirector[1][0] : '-';
 			$act = $act ? $act : '-';
-			echo $movieTitle[1][0]."\n番号:".$movieCode[1][0]."\n發行:".$movieDate[1][0]." ".$movieTime[1][0]."\n導演:".$movieDirector[1][0]."\n演员:".$act."\n製作商:".$movieMake[1][0]."  發行商:".$movieIssue[1][0]."\n标签:".$tag;
+			echo $movieTitle[1][0]."\n番号: ".$movieCode[1][0]."\n發行: ".$movieDate[1][0]." ".$movieTime[1][0]."\n導演: ".$movieDirector[1][0]."\n演员: ".$act."\n製作商: ".$movieMake[1][0]."  發行商: ".$movieIssue[1][0]."\n标签: ".$tag;
 		}
 		if(@$_GET['url'] === '1') {
 			/*获取磁力链接并返回前两条*/
@@ -71,16 +69,80 @@ if($getPornPage === FALSE||$httpCode >= "300" ){
 				} else {
 					preg_match_all('/<td.width=\".*?\">\s+<a .*?href="(.*?)".*?>[(^\s*)|(\s*$)]([\s\S]*?)\s+[<a|<\/a>]/is',$getUrlPage,$getUrl);
 					if($getUrl[1][0]) {
-						echo "\n《".trim($getUrl[2][0])."》链接:\n".urldecode($getUrl[1][0]);
+						echo "\n《".trim($getUrl[2][0])."》链接: \n".urldecode($getUrl[1][0]);
 					}
 					if($getUrl[1][1]) {
-						echo "\n《".trim($getUrl[2][1])."》链接:\n".urldecode($getUrl[1][1]);
+						echo "\n《".trim($getUrl[2][1])."》链接: \n".urldecode($getUrl[1][1]);
 					}
 				}
 			} else {
 				echo 'Bad Requests';
 			}
 		}
+		if(@$_GET['url'] === '2') {
+			/*获取所有磁力链接并返回*/
+			$getGid = preg_match('/(var\sgid\s+)=.\d+/i',$getPornPage,$getPorn);
+			$getGid = preg_match('/\d+/', $getPorn[0], $pornGid);
+			if($getGid) {
+				$gid = $pornGid[0];
+				$headers = randIp();
+				$ch = curl_init();
+				$referer = "https://www.javbus.com/".$pornCode;
+				curl_setopt($ch,CURLOPT_URL,"https://www.javbus.com/ajax/uncledatoolsbyajax.php?uc=0&gid=".$gid);
+				curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+				curl_setopt($ch,CURLOPT_HEADER,0);
+				curl_setopt($ch, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.157 Safari/537.36");
+				curl_setopt($ch,CURLOPT_REFERER,$referer);
+				curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);//构造HTTP头
+				curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时限制防止死循环 
+				$getUrlPage = curl_exec($ch);
+				$httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+				curl_close($ch);
+				if($getUrlPage === FALSE||$httpCode >= "300" ){
+					echo 'Bad Requests';
+				} else {
+					preg_match_all('/<td.width=\".*?\">\s+<a .*?href="(.*?)".*?>[(^\s*)|(\s*$)]([\s\S]*?)\s+[<a|<\/a>]/is',$getUrlPage,$getUrl);
+					if($getUrl[1][0]) {
+						foreach($getUrl[2] as $getUrlNum => $getUrlName){
+							echo "\n《".trim($getUrlName)."》链接:\n".urldecode($getUrl[1][$getUrlNum]);
+						}
+					}
+				}
+			} else {
+				echo 'Bad Requests';
+			}
+		}
+	}
+} else {
+	/*通过关键词查询*/
+	if(@$_GET['key']) {
+		$pornKey = $_GET['key'];
+		$headers = randIp();
+		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_URL,"https://www.javbus.com/search/".$pornKey);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch,CURLOPT_HEADER,0);
+		curl_setopt($ch, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.157 Safari/537.36");
+		curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);//构造HTTP头
+		curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时限制防止死循环 
+		$getPornPage = curl_exec($ch);
+		$httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		if($getPornPage === FALSE||$httpCode >= "300" ){
+			echo "未查询到番剧内容";
+		} else {
+			/*提取列表信息*/
+			preg_match_all('/<div.class=\"photo-info\">\s+<span>(.*?)<br.\/>/is',$getPornPage,$movieTitle);
+			preg_match_all('/<date>(.*?)<\/date>.\/.<date>(.*?)<\/date><\/span>/is',$getPornPage,$movieInfo);
+			if($movieTitle[1][0]) {
+				foreach($movieTitle[1] as $movieTitleNum => $movieTitleName){
+					echo "《".trim($movieTitleName)."》番号: (`".$movieInfo[1][$movieTitleNum]."`)\n";
+				}
+			}
+		}
+	} else {
+		exit('请求数据为空');
+	}
 }
 
 /*生成随机IP的HTTP头*/
