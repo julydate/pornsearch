@@ -27,6 +27,8 @@ if(@$_GET['token'] === $token) {
 				$ak = md5($ip.$ak);
 				$reply = @file_get_contents("/ipLoc/index.php?ip=".$ip."&ak=".$ak);
 				$reply = $reply ? $reply : '接口调用失败';
+              			if($reply !==  "接口调用失败")$reply_json = json_decode($reply,true);
+              			if($reply_json['status'] ===  "1")$reply = "IPIP-NET:\n".$reply_json['data']['ipipnet']."\n百度:\n".$reply_json['data']['baidu']."\nIPPLUS360:\n".$reply_json['data']['ipplus360']."\nRTBAsia:\n".$reply_json['data']['rtbasia']."\n高德:\n".$reply_json['data']['amap']."\n搜狗:\n".$reply_json['data']['gomap'];
 				$reply = urlencode("IP:".$ip."\n".$reply);
 			}
 		} else {
