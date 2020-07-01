@@ -2,6 +2,8 @@
 define('INDEX',TRUE);
 /*Telegram Bot Token*/
 $token = "";
+/*Path To API*/
+$path = "";
 if(@$_GET['token'] === $token) {
 	$msg = @file_get_contents('php://input');
 	$msg_json = json_decode($msg,true);
@@ -21,8 +23,8 @@ if(@$_GET['token'] === $token) {
 		$code = preg_replace('/\/jav/i',"",$chat_text);
 		$code = trim($code);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?inf=1&url=1&code=".$code);
-		$photo = @file_get_contents("pornsearch.php?img=1&code=".$code);
+		$reply = @file_get_contents($path."pornsearch.php?inf=1&url=1&code=".$code);
+		$photo = @file_get_contents($path."pornsearch.php?img=1&code=".$code);
 		$reply = $reply ? $reply : '无番剧信息';
 		$photo = $photo ? $photo : '无图片信息';
 		$reply = urlencode("#NSFW\n".$reply);
@@ -45,8 +47,8 @@ if(@$_GET['token'] === $token) {
 		$code = preg_replace('/\/nsfw/i',"",$chat_text);
 		$code = trim($code);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?inf=1&url=2&code=".$code);
-		$photo = @file_get_contents("pornsearch.php?img=1&code=".$code);
+		$reply = @file_get_contents($path."pornsearch.php?inf=1&url=2&code=".$code);
+		$photo = @file_get_contents($path."pornsearch.php?img=1&code=".$code);
 		$reply = $reply ? $reply : '无番剧信息';
 		$photo = $photo ? $photo : '无图片信息';
 		$reply = urlencode("#NSFW\n".$reply);
@@ -65,7 +67,7 @@ if(@$_GET['token'] === $token) {
 		$porn_key = preg_replace('/\/pornso/i',"",$chat_text);
 		$porn_key = trim($porn_key);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?key=".$porn_key."&type=1");
+		$reply = @file_get_contents($path."pornsearch.php?key=".$porn_key."&type=1");
 		$reply = $reply ? $reply : '无番剧信息';
 		$reply = urlencode("#NSFW\n".$reply);
 		$callback = @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?parse_mode=markdown&chat_id=".$chat_id."&text=".$reply);
@@ -82,7 +84,7 @@ if(@$_GET['token'] === $token) {
 		$porn_key = preg_replace('/\/ucpornso/i',"",$chat_text);
 		$porn_key = trim($porn_key);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?uckey=".$porn_key);
+		$reply = @file_get_contents($path."pornsearch.php?uckey=".$porn_key);
 		$reply = $reply ? $reply : '无番剧信息';
 		$reply = urlencode("#NSFW\n".$reply);
 		$callback = @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?parse_mode=markdown&chat_id=".$chat_id."&text=".$reply);
@@ -99,7 +101,7 @@ if(@$_GET['token'] === $token) {
 		$porn_key = preg_replace('/\/porndir/i',"",$chat_text);
 		$porn_key = trim($porn_key);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?key=".$porn_key."&type=2");
+		$reply = @file_get_contents($path."pornsearch.php?key=".$porn_key."&type=2");
 		$reply = $reply ? $reply : '无番剧信息';
 		$reply = urlencode("#NSFW\n".$reply);
 		$callback = @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?parse_mode=markdown&chat_id=".$chat_id."&text=".$reply);
@@ -116,7 +118,7 @@ if(@$_GET['token'] === $token) {
 		$porn_key = preg_replace('/\/pornmake/i',"",$chat_text);
 		$porn_key = trim($porn_key);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?key=".$porn_key."&type=3");
+		$reply = @file_get_contents($path."pornsearch.php?key=".$porn_key."&type=3");
 		$reply = $reply ? $reply : '无番剧信息';
 		$reply = urlencode("#NSFW\n".$reply);
 		$callback = @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?parse_mode=markdown&chat_id=".$chat_id."&text=".$reply);
@@ -133,7 +135,7 @@ if(@$_GET['token'] === $token) {
 		$porn_key = preg_replace('/\/pornissue/i',"",$chat_text);
 		$porn_key = trim($porn_key);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?key=".$porn_key."&type=4");
+		$reply = @file_get_contents($path."pornsearch.php?key=".$porn_key."&type=4");
 		$reply = $reply ? $reply : '无番剧信息';
 		$reply = urlencode("#NSFW\n".$reply);
 		$callback = @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?parse_mode=markdown&chat_id=".$chat_id."&text=".$reply);
@@ -150,7 +152,7 @@ if(@$_GET['token'] === $token) {
 		$porn_key = preg_replace('/\/pornser/i',"",$chat_text);
 		$porn_key = trim($porn_key);
 		/*请求查询数据*/
-		$reply = @file_get_contents("pornsearch.php?key=".$porn_key."&type=5");
+		$reply = @file_get_contents($path."pornsearch.php?key=".$porn_key."&type=5");
 		$reply = $reply ? $reply : '无番剧信息';
 		$reply = urlencode("#NSFW\n".$reply);
 		$callback = @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?parse_mode=markdown&chat_id=".$chat_id."&text=".$reply);
