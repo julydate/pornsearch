@@ -2,8 +2,6 @@
 define('INDEX',TRUE);
 /*Telegram Bot Token*/
 $token = "";
-/*IP Check Access Key*/
-$ak = "";
 if(@$_GET['token'] === $token) {
 	$msg = @file_get_contents('php://input');
 	$msg_json = json_decode($msg,true);
